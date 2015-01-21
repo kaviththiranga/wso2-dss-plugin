@@ -22,6 +22,7 @@ import com.google.inject.multibindings.Multibinder;
 import org.wso2.dss.server.genarator.DSSProjectGenerator;
 import org.wso2.dss.server.project.type.DssProjectTypeDescriptionExtension;
 import org.wso2.dss.server.project.type.DssProjectTypeExtension;
+import org.wso2.dss.server.rest.HelloService;
 
 /**
  * @author Evgen Vidolob
@@ -32,6 +33,7 @@ public class DssModule extends AbstractModule {
     protected void configure() {
         bind(DssProjectTypeExtension.class);
         bind(DssProjectTypeDescriptionExtension.class);
+        bind(HelloService.class);
 
         Multibinder.newSetBinder(binder(), ProjectGenerator.class).addBinding().to(DSSProjectGenerator.class);
     }

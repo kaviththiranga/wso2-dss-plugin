@@ -18,6 +18,9 @@ package org.wso2.dss.client;
  * @author Evgen Vidolob
  */
 
+import com.codenvy.ide.api.action.ActionManager;
+import com.codenvy.ide.api.action.DefaultActionGroup;
+import com.codenvy.ide.api.action.IdeActions;
 import com.codenvy.ide.api.editor.EditorRegistry;
 import com.codenvy.ide.api.extension.Extension;
 import com.codenvy.ide.api.filetypes.FileType;
@@ -31,6 +34,7 @@ import com.google.inject.name.Named;
 
 import org.wso2.dss.client.editor.DBSEditorProvider;
 import org.wso2.dss.client.editor.MessagesRouter;
+import org.wso2.dss.client.hello.HelloAction;
 import org.wso2.dss.client.wizard.DSSConfigurationPresenter;
 import org.wso2.dss.shared.ProjectConstants;
 
@@ -58,5 +62,13 @@ public class DSSExtension {
     @Inject
     protected void initializeRouter(MessagesRouter router){
 
+    }
+
+    @Inject
+    public void initializeActions(HelloAction helloAction, ActionManager actionManager){
+        actionManager.registerAction("helloAction", helloAction);
+
+        DefaultActionGroup fileMenuGroup = (DefaultActionGroup)actionManager.getAction(IdeActions.GROUP_FILE);
+        fileMenuGroup.add(helloAction);
     }
 }
