@@ -18,13 +18,18 @@ package org.wso2.dss.client;
  * @author Evgen Vidolob
  */
 
+import com.codenvy.ide.api.editor.EditorRegistry;
 import com.codenvy.ide.api.extension.Extension;
+import com.codenvy.ide.api.filetypes.FileType;
+import com.codenvy.ide.api.filetypes.FileTypeRegistry;
 import com.codenvy.ide.api.projecttype.wizard.ProjectTypeWizardRegistry;
 import com.codenvy.ide.api.projecttype.wizard.ProjectWizard;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
+import org.wso2.dss.client.editor.DSSEditorProvider;
 import org.wso2.dss.client.wizard.DSSConfigurationPresenter;
 import org.wso2.dss.shared.ProjectConstants;
 
@@ -35,10 +40,17 @@ public class DSSExtension {
     @Inject
     public DSSExtension(ProjectWizard projectWizard,
                         Provider<DSSConfigurationPresenter> wizardPage,
-                        ProjectTypeWizardRegistry registry) {
+                        ProjectTypeWizardRegistry registry,
+                        FileTypeRegistry fileTypeRegistry,
+                        @Named("wso2DSSFile")FileType dssFileType,
+                        DSSEditorProvider editorProvider,
+                        EditorRegistry editorRegistry) {
 
         projectWizard.addPage(wizardPage);
 
         registry.addWizard(ProjectConstants.PROJECT_ID, projectWizard);
+
+        fileTypeRegistry.registerFileType(dssFileType);
+        editorRegistry.registerDefaultEditor(dssFileType, editorProvider);
     }
 }
