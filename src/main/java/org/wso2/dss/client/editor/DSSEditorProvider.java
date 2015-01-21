@@ -12,31 +12,38 @@
 /**
  * Created by Evgen on 1/20/15.
  */
-package org.wso2.dss.client.inject;
+package org.wso2.dss.client.editor;
 
-import com.codenvy.ide.api.extension.ExtensionGinModule;
-import com.codenvy.ide.api.filetypes.FileType;
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Provides;
+import com.codenvy.ide.api.editor.EditorPartPresenter;
+import com.codenvy.ide.api.editor.EditorProvider;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 
-import org.wso2.dss.client.DSSResources;
+import javax.annotation.Nonnull;
 
 /**
  * @author Evgen Vidolob
  */
-@ExtensionGinModule
-public class DSSGinModule extends AbstractGinModule {
-    @Override
-    protected void configure() {
+@Singleton
+public class DSSEditorProvider implements EditorProvider {
 
+    @Inject
+    public DSSEditorProvider() {
     }
 
-    @Provides
-    @Singleton
-    @Named("wso2DSSFile")
-    protected FileType provideDssFileTYpe(DSSResources resources){
-        return new FileType(resources.dssFileIcon(),"text/xml", "dss");
+    @Override
+    public String getId() {
+        return "wso2dssEditor";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Editor for dss file";
+    }
+
+    @Nonnull
+    @Override
+    public EditorPartPresenter getEditor() {
+        return null;
     }
 }
