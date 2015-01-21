@@ -56,6 +56,6 @@ public class DSSProjectGenerator implements ProjectGenerator {
 
 
         FolderEntry dbsFolder = baseFolder.createFolder("dbs");
-        dbsFolder.createFile(baseFolder.getName() + ".dbs", TAG.getBytes(), "text/xml");
+        dbsFolder.createFile(baseFolder.getName() + ".dbs", TAG.getBytes(), "text/xml+wso2-dbs");
     }
 }

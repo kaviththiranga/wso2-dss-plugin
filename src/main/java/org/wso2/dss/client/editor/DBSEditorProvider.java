@@ -17,6 +17,7 @@ package org.wso2.dss.client.editor;
 import com.codenvy.ide.api.editor.EditorPartPresenter;
 import com.codenvy.ide.api.editor.EditorProvider;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import javax.annotation.Nonnull;
@@ -25,15 +26,18 @@ import javax.annotation.Nonnull;
  * @author Evgen Vidolob
  */
 @Singleton
-public class DSSEditorProvider implements EditorProvider {
+public class DBSEditorProvider implements EditorProvider {
+
+    private final Provider<DBSEditor> provider;
 
     @Inject
-    public DSSEditorProvider() {
+    public DBSEditorProvider(Provider<DBSEditor> provider) {
+        this.provider = provider;
     }
 
     @Override
     public String getId() {
-        return "wso2dssEditor";
+        return "wso2dbsEditor";
     }
 
     @Override
@@ -44,6 +48,6 @@ public class DSSEditorProvider implements EditorProvider {
     @Nonnull
     @Override
     public EditorPartPresenter getEditor() {
-        return null;
+        return provider.get();
     }
 }

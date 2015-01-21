@@ -35,8 +35,10 @@ public class DSSGinModule extends AbstractGinModule {
 
     @Provides
     @Singleton
-    @Named("wso2DSSFile")
+    @Named("wso2DBSFile")
     protected FileType provideDssFileTYpe(DSSResources resources){
-        return new FileType(resources.dssFileIcon(),"text/xml", "dss");
+        return new FileType(resources.dssFileIcon(),"text/xml+wso2-dbs", "dbs");
     }
+
+
 }
