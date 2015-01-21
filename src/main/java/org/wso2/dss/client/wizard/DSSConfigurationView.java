@@ -23,7 +23,26 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DSSConfigurationViewImpl.class)
 public interface DSSConfigurationView extends View<DSSConfigurationView.ActionDelegate> {
 
+    String getGroupId();
+
+    void setGroupId(String groupId);
+
+    String getArtifactId();
+
+    void setArtifactId(String artifactId);
+
+    String getVersion();
+
+    void setVersion(String version);
+
+
     interface ActionDelegate {
+
+        void onGroupIdChanged();
+
+        void onArtifactIdChanged();
+
+        void onVersionChanged();
 
     }
 

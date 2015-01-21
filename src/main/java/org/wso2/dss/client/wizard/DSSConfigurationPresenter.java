@@ -42,13 +42,17 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
 
     @Override
     public boolean isCompleted() {
-        return false;
+        return !(view.getGroupId().isEmpty() ||
+                view.getArtifactId().isEmpty() ||
+                view.getVersion().isEmpty());
     }
 
     @Override
     public void focusComponent() {
 
     }
+
+
 
     @Override
     public void removeOptions() {
@@ -57,6 +61,25 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
 
     @Override
     public void go(AcceptsOneWidget container) {
+        view.setGroupId("");
+        view.setArtifactId("");
+        view.setVersion("");
+
         container.setWidget(view);
+    }
+
+    @Override
+    public void onGroupIdChanged() {
+        delegate.updateControls();
+    }
+
+    @Override
+    public void onArtifactIdChanged() {
+        delegate.updateControls();
+    }
+
+    @Override
+    public void onVersionChanged() {
+        delegate.updateControls();
     }
 }

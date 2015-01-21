@@ -12,5 +12,21 @@
 -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-   <g:Label text="Hello world"/>
+
+    <ui:style>
+        .leftMargin{
+            margin-left: 20px;
+        }
+    </ui:style>
+
+
+    <g:FlowPanel>
+        <g:Label text="Group id:" addStyleNames="{style.leftMargin}"/>
+        <g:TextBox ui:field="groupId" addStyleNames="{style.leftMargin}"/>
+        <g:Label text="Artifact id:" addStyleNames="{style.leftMargin}"/>
+        <g:TextBox ui:field="artifactId" addStyleNames="{style.leftMargin}"/>
+        <g:Label text="Version:" addStyleNames="{style.leftMargin}"/>
+        <g:TextBox ui:field="version" addStyleNames="{style.leftMargin}"/>
+    </g:FlowPanel>
+
 </ui:UiBinder>
