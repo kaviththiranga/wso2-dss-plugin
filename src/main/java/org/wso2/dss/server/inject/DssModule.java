@@ -14,9 +14,12 @@
  */
 package org.wso2.dss.server.inject;
 
+import com.codenvy.api.project.server.ProjectGenerator;
 import com.codenvy.inject.DynaModule;
 import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.Multibinder;
 
+import org.wso2.dss.server.genarator.DSSProjectGenerator;
 import org.wso2.dss.server.project.type.DssProjectTypeDescriptionExtension;
 import org.wso2.dss.server.project.type.DssProjectTypeExtension;
 
@@ -29,5 +32,7 @@ public class DssModule extends AbstractModule {
     protected void configure() {
         bind(DssProjectTypeExtension.class);
         bind(DssProjectTypeDescriptionExtension.class);
+
+        Multibinder.newSetBinder(binder(), ProjectGenerator.class).addBinding().to(DSSProjectGenerator.class);
     }
 }
