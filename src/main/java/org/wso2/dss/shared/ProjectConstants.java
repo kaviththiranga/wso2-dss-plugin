@@ -24,4 +24,12 @@ public interface ProjectConstants {
     String PROJECT_NAME = "WSO2 DSS Project";
 
     String CATEGORY = "WSO2";
+
+    String GROUP_ID = "DSSGroupID";
+
+    String ARTIFACT_ID = "DSSArtifactID";
+
+    String VERSION = "DSSVersion";
+
+    String GENERATOR_ID = "DSSGeneratorID";
 }

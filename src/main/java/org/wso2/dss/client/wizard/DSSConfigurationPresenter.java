@@ -14,11 +14,20 @@
  */
 package org.wso2.dss.client.wizard;
 
+import com.codenvy.api.project.shared.dto.GeneratorDescription;
+import com.codenvy.api.project.shared.dto.ProjectDescriptor;
+import com.codenvy.ide.api.projecttype.wizard.ProjectWizard;
 import com.codenvy.ide.api.wizard.AbstractWizardPage;
+import com.codenvy.ide.dto.DtoFactory;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
+import org.wso2.dss.shared.ProjectConstants;
+
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Evgen Vidolob
@@ -26,11 +35,13 @@ import javax.annotation.Nullable;
 public class DSSConfigurationPresenter extends AbstractWizardPage implements DSSConfigurationView.ActionDelegate {
 
     private final DSSConfigurationView view;
+    private final DtoFactory dtoFactory;
 
     @Inject
-    public DSSConfigurationPresenter(DSSConfigurationView view) {
+    public DSSConfigurationPresenter(DSSConfigurationView view, DtoFactory dtoFactory) {
         super(null, null);
         this.view = view;
+        this.dtoFactory = dtoFactory;
         view.setDelegate(this);
     }
 
@@ -43,8 +54,8 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
     @Override
     public boolean isCompleted() {
         return !(view.getGroupId().isEmpty() ||
-                view.getArtifactId().isEmpty() ||
-                view.getVersion().isEmpty());
+                 view.getArtifactId().isEmpty() ||
+                 view.getVersion().isEmpty());
     }
 
     @Override
@@ -52,11 +63,39 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
 
     }
 
+    @Override
+    public void storeOptions() {
+        Map<String, List<String>> attributes = getAttributes();
 
+        attributes.put(ProjectConstants.GROUP_ID, Arrays.asList(view.getGroupId()));
+        attributes.put(ProjectConstants.ARTIFACT_ID, Arrays.asList(view.getArtifactId()));
+        attributes.put(ProjectConstants.VERSION, Arrays.asList(view.getVersion()));
+
+        GeneratorDescription generator =
+                dtoFactory.createDto(GeneratorDescription.class).withName(ProjectConstants.GENERATOR_ID);
+
+        wizardContext.putData(ProjectWizard.GENERATOR, generator);
+
+    }
+
+    private Map<String, List<String>> getAttributes() {
+        ProjectDescriptor project = wizardContext.getData(ProjectWizard.PROJECT);
+
+        if (project == null) {
+            throw new IllegalStateException("Some problem happened");
+        }
+
+        return project.getAttributes();
+    }
 
     @Override
     public void removeOptions() {
+        Map<String, List<String>> attributes = getAttributes();
+        attributes.remove(ProjectConstants.GROUP_ID);
+        attributes.remove(ProjectConstants.ARTIFACT_ID);
+        attributes.remove(ProjectConstants.VERSION);
 
+        wizardContext.removeData(ProjectWizard.GENERATOR);
     }
 
     @Override
