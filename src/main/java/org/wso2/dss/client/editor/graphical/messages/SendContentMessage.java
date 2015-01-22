@@ -12,7 +12,7 @@
 /**
  * Created by Evgen on 1/21/15.
  */
-package org.wso2.dss.client.editor.messages;
+package org.wso2.dss.client.editor.graphical.messages;
 
 import com.google.gwt.webworker.client.messages.MessageImpl;
 

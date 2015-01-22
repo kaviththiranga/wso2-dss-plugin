@@ -12,7 +12,7 @@
 /**
  * Created by Evgen on 1/20/15.
  */
-package org.wso2.dss.client.editor;
+package org.wso2.dss.client.editor.graphical;
 
 import elemental.html.IFrameElement;
 
@@ -27,8 +27,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Frame;
 
 import org.vectomatic.dom.svg.ui.SVGResource;
-import org.wso2.dss.client.editor.messages.GetContentMessage;
-import org.wso2.dss.client.editor.messages.SendContentMessage;
+import org.wso2.dss.client.editor.IframeEditor;
+import org.wso2.dss.client.editor.graphical.messages.GetContentMessage;
+import org.wso2.dss.client.editor.graphical.messages.SendContentMessage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,13 +37,13 @@ import javax.annotation.Nullable;
 /**
  * @author Evgen Vidolob
  */
-public class DBSEditor extends AbstractEditorPresenter {
+public class DBSEditor extends AbstractEditorPresenter implements IframeEditor {
 
     private Frame editorFrame;
+    private AsyncCallback<String> callback;
+    private boolean needToSave= true;
 
-    @Override
-    protected void initializeEditor() {
-//        input.getFile().getContent();
+    public DBSEditor() {
         editorFrame = new Frame("/testeditor/index.html");
         editorFrame.addLoadHandler(new LoadHandler() {
             @Override
@@ -51,6 +52,12 @@ public class DBSEditor extends AbstractEditorPresenter {
             }
         });
         editorFrame.setSize("100%", "100%");
+    }
+
+    @Override
+    protected void initializeEditor() {
+//        input.getFile().getContent();
+
     }
 
     private void iframeLoaded() {
@@ -62,14 +69,18 @@ public class DBSEditor extends AbstractEditorPresenter {
 
             @Override
             public void onSuccess(String result) {
-                SendContentMessage message = SendContentMessage.make();
-                message.setContent(result);
-                message.setFilePath(input.getFile().getPath());
-                IFrameElement frameElement = (IFrameElement)editorFrame.getElement();
-                frameElement.getContentWindow().postMessage(message,"*");
+                sendContentToIframe(result);
                 firePropertyChange(PROP_INPUT);
             }
         });
+    }
+
+    private void sendContentToIframe(String result) {
+        SendContentMessage message = SendContentMessage.make();
+        message.setContent(result);
+        message.setFilePath(input.getFile().getPath());
+        IFrameElement frameElement = (IFrameElement)editorFrame.getElement();
+        frameElement.getContentWindow().postMessage(message, "*");
     }
 
     @Override
@@ -89,6 +100,10 @@ public class DBSEditor extends AbstractEditorPresenter {
 
     @Override
     public void doSave(AsyncCallback<EditorInput> callback) {
+        sendGetContentMessage();
+    }
+
+    private void sendGetContentMessage() {
         GetContentMessage getContentMessage = GetContentMessage.make();
         getContentMessage.setFilePath(input.getFile().getPath());
         IFrameElement frameElement = (IFrameElement)editorFrame.getElement();
@@ -150,20 +165,37 @@ public class DBSEditor extends AbstractEditorPresenter {
     }
 
     public void saveContent(String content) {
-        input.getFile().updateContent(content, new AsyncCallback<Void>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                Log.error(getClass(), caught);
-            }
+        if(needToSave) {
+            input.getFile().updateContent(content, new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    Log.error(getClass(), caught);
+                }
 
-            @Override
-            public void onSuccess(Void result) {
-                updateDirtyState(false);
+                @Override
+                public void onSuccess(Void result) {
+                    updateDirtyState(false);
+                }
+            });
+        } else{
+            needToSave = true;
+            if(callback != null){
+                callback.onSuccess(content);
             }
-        });
+        }
     }
 
     public void setDirtyState(boolean dirty) {
         updateDirtyState(dirty);
+    }
+
+    public void serialize(String content){
+        sendContentToIframe(content);
+    }
+
+    public void deserialize(AsyncCallback<String> callback){
+        this.callback = callback;
+        this.needToSave = false;
+        sendGetContentMessage();
     }
 }

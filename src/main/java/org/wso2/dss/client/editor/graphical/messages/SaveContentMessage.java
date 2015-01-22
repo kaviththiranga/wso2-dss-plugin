@@ -12,25 +12,25 @@
 /**
  * Created by Evgen on 1/21/15.
  */
-package org.wso2.dss.client.editor.messages;
+package org.wso2.dss.client.editor.graphical.messages;
 
 import com.google.gwt.webworker.client.messages.MessageImpl;
 
 /**
  * @author Evgen Vidolob
  */
-public class DirtyStateChangedMessage extends MessageImpl {
-    protected DirtyStateChangedMessage() {
+public class SaveContentMessage extends MessageImpl {
+    protected SaveContentMessage() {
     }
 
-    public static native DirtyStateChangedMessage make() /*-{
+    public static native SaveContentMessage make() /*-{
         return {
-            _type : 4
+            _type : 3
         }
     }-*/;
 
-    public final native boolean isDirty() /*-{
-        return this["dirty"];
+    public final native String getContent() /*-{
+        return this["content"];
     }-*/;
 
     public final native String getFilePath() /*-{

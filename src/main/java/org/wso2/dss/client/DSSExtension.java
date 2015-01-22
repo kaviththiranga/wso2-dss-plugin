@@ -32,8 +32,9 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import org.wso2.dss.client.editor.DBSEditorProvider;
-import org.wso2.dss.client.editor.MessagesRouter;
+import org.wso2.dss.client.editor.DBSMultiEditorProvider;
+import org.wso2.dss.client.editor.graphical.DBSEditorProvider;
+import org.wso2.dss.client.editor.graphical.MessagesRouter;
 import org.wso2.dss.client.hello.HelloAction;
 import org.wso2.dss.client.wizard.DSSConfigurationPresenter;
 import org.wso2.dss.shared.ProjectConstants;
@@ -48,7 +49,7 @@ public class DSSExtension {
                         ProjectTypeWizardRegistry registry,
                         FileTypeRegistry fileTypeRegistry,
                         @Named("wso2DBSFile")FileType dssFileType,
-                        DBSEditorProvider editorProvider,
+                        DBSMultiEditorProvider editorProvider,
                         EditorRegistry editorRegistry) {
 
         projectWizard.addPage(wizardPage);

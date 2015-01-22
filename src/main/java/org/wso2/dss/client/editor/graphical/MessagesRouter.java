@@ -12,7 +12,7 @@
 /**
  * Created by Evgen on 1/21/15.
  */
-package org.wso2.dss.client.editor;
+package org.wso2.dss.client.editor.graphical;
 
 import elemental.client.Browser;
 import elemental.events.Event;
@@ -21,16 +21,15 @@ import elemental.events.MessageEvent;
 
 import com.codenvy.ide.api.editor.EditorAgent;
 import com.codenvy.ide.api.editor.EditorPartPresenter;
-import com.codenvy.ide.collections.Jso;
 import com.codenvy.ide.collections.StringMap;
-import com.google.gwt.webworker.client.messages.Message;
 import com.google.gwt.webworker.client.messages.MessageFilter;
 import com.google.gwt.webworker.client.messages.MessageImpl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import org.wso2.dss.client.editor.messages.DirtyStateChangedMessage;
-import org.wso2.dss.client.editor.messages.SaveContentMessage;
+import org.wso2.dss.client.editor.IframeEditor;
+import org.wso2.dss.client.editor.graphical.messages.DirtyStateChangedMessage;
+import org.wso2.dss.client.editor.graphical.messages.SaveContentMessage;
 
 /**
  * @author Evgen Vidolob
@@ -51,8 +50,8 @@ public class MessagesRouter {
                 editorAgent.getOpenedEditors().iterate(new StringMap.IterationCallback<EditorPartPresenter>() {
                     @Override
                     public void onIteration(String key, EditorPartPresenter value) {
-                        if(message.getFilePath().equals(key) && value instanceof DBSEditor){
-                            DBSEditor editor = ((DBSEditor)value);
+                        if(message.getFilePath().equals(key) && value instanceof IframeEditor){
+                            IframeEditor editor = ((IframeEditor)value);
                                     editor.saveContent(message.getContent());
                         }
                     }
@@ -66,8 +65,8 @@ public class MessagesRouter {
                 editorAgent.getOpenedEditors().iterate(new StringMap.IterationCallback<EditorPartPresenter>() {
                     @Override
                     public void onIteration(String key, EditorPartPresenter value) {
-                        if(message.getFilePath().equals(key) && value instanceof DBSEditor){
-                            DBSEditor editor = ((DBSEditor)value);
+                        if(message.getFilePath().equals(key) && value instanceof IframeEditor){
+                            IframeEditor editor = ((IframeEditor)value);
                             editor.setDirtyState(message.isDirty());
                         }
                     }

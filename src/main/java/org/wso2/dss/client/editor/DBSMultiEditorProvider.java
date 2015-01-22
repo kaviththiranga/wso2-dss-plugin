@@ -10,7 +10,7 @@
  *******************************************************************************/
 
 /**
- * Created by Evgen on 1/20/15.
+ * Created by Evgen on 1/22/15.
  */
 package org.wso2.dss.client.editor;
 
@@ -26,23 +26,23 @@ import javax.annotation.Nonnull;
  * @author Evgen Vidolob
  */
 @Singleton
-public class DBSEditorProvider implements EditorProvider {
+public class DBSMultiEditorProvider implements EditorProvider {
 
-    private final Provider<DBSEditor> provider;
+    private final Provider<DBSMultiPageEditor> provider;
 
     @Inject
-    public DBSEditorProvider(Provider<DBSEditor> provider) {
+    public DBSMultiEditorProvider(Provider<DBSMultiPageEditor> provider) {
         this.provider = provider;
     }
 
     @Override
     public String getId() {
-        return "wso2dbsEditor";
+        return "DBSMultiPageEditor";
     }
 
     @Override
     public String getDescription() {
-        return "Editor for dss file";
+        return "Description...";
     }
 
     @Nonnull

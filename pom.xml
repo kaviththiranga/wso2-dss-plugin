@@ -30,6 +30,11 @@
             <version>${codenvy.ide.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.codenvy.ide</groupId>
+            <artifactId>codenvy-ide-jseditor</artifactId>
+            <version>${codenvy.ide.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.codenvy.plugin-java</groupId>
             <artifactId>codenvy-maven-tools</artifactId>
             <version>${codenvy.plugin-java.version}</version>
