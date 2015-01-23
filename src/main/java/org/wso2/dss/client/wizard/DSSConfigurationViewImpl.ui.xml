@@ -27,6 +27,10 @@
         <g:TextBox ui:field="artifactId" addStyleNames="{style.leftMargin}"/>
         <g:Label text="Version:" addStyleNames="{style.leftMargin}"/>
         <g:TextBox ui:field="version" addStyleNames="{style.leftMargin}"/>
+        <g:Button ui:field="showMessageDialog" text="Message"/>
+        <g:Button ui:field="showConfirmDialog" text="Confirmation"/>
+        <g:Button ui:field="showInputDialog" text="Input"/>
+
     </g:FlowPanel>
 
 </ui:UiBinder>

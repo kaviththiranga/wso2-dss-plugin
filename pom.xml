@@ -31,6 +31,11 @@
         </dependency>
         <dependency>
             <groupId>com.codenvy.ide</groupId>
+            <artifactId>codenvy-ide-ui</artifactId>
+            <version>${codenvy.ide.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codenvy.ide</groupId>
             <artifactId>codenvy-ide-jseditor</artifactId>
             <version>${codenvy.ide.version}</version>
         </dependency>
@@ -51,22 +56,28 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.google.gwt.gwtmockito</groupId>
             <artifactId>gwtmockito</artifactId>
             <version>${com.google.gwt.gwtmockito}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.mockito</groupId>
                     <artifactId>mockito-all</artifactId>
+                    <groupId>org.mockito</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.everrest</groupId>
+            <artifactId>everrest-test</artifactId>
+            <version>${org.everrest.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -104,7 +115,6 @@
                 <directory>${dto-generator-out-directory}</directory>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <directory>src/test/java</directory>

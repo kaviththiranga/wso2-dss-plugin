@@ -44,6 +44,9 @@ public interface DSSConfigurationView extends View<DSSConfigurationView.ActionDe
 
         void onVersionChanged();
 
+        void showConfirmDialog();
+
+        void showInputDialog();
     }
 
 }

@@ -19,6 +19,7 @@
     <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name="com.google.gwt.webworker.WebWorker"/>
     <inherits name="com.codenvy.ide.jseditor.JsEditor"/>
+    <inherits name="com.codenvy.ide.ui.CodenvyUI"/>
 
     <source path="client"/>
     <source path="shared"/>

@@ -19,6 +19,11 @@ import com.codenvy.api.project.shared.dto.ProjectDescriptor;
 import com.codenvy.ide.api.projecttype.wizard.ProjectWizard;
 import com.codenvy.ide.api.wizard.AbstractWizardPage;
 import com.codenvy.ide.dto.DtoFactory;
+import com.codenvy.ide.ui.dialogs.CancelCallback;
+import com.codenvy.ide.ui.dialogs.DialogFactory;
+import com.codenvy.ide.ui.dialogs.InputCallback;
+import com.codenvy.ide.ui.dialogs.input.InputDialog;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
@@ -36,12 +41,14 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
 
     private final DSSConfigurationView view;
     private final DtoFactory dtoFactory;
+    private final DialogFactory factory;
 
     @Inject
-    public DSSConfigurationPresenter(DSSConfigurationView view, DtoFactory dtoFactory) {
+    public DSSConfigurationPresenter(DSSConfigurationView view, DtoFactory dtoFactory, com.codenvy.ide.ui.dialogs.DialogFactory factory) {
         super(null, null);
         this.view = view;
         this.dtoFactory = dtoFactory;
+        this.factory = factory;
         view.setDelegate(this);
     }
 
@@ -120,5 +127,26 @@ public class DSSConfigurationPresenter extends AbstractWizardPage implements DSS
     @Override
     public void onVersionChanged() {
         delegate.updateControls();
+    }
+
+    @Override
+    public void showConfirmDialog() {
+//        factory.createConfirmDialog()
+    }
+
+    @Override
+    public void showInputDialog() {
+        InputDialog inputDialog = factory.createInputDialog("Test title", "Test Message", new InputCallback() {
+            @Override
+            public void accepted(String value) {
+                Window.alert("String from dialog: " + value);
+            }
+        }, new CancelCallback() {
+            @Override
+            public void cancelled() {
+                Window.alert("Cancel");
+            }
+        });
+        inputDialog.show();
     }
 }

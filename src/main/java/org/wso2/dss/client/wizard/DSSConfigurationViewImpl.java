@@ -15,10 +15,12 @@
 package org.wso2.dss.client.wizard;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,6 +46,12 @@ public class DSSConfigurationViewImpl extends Composite implements DSSConfigurat
     TextBox artifactId;
     @UiField
     TextBox version;
+    @UiField
+    Button  showInputDialog;
+    @UiField
+    Button  showConfirmDialog;
+    @UiField
+    Button  showMessageDialog;
 
     @Inject
     public DSSConfigurationViewImpl() {
@@ -101,4 +109,17 @@ public class DSSConfigurationViewImpl extends Composite implements DSSConfigurat
         delegate.onVersionChanged();
     }
 
+    @UiHandler("showConfirmDialog")
+    public void showConfirmDialog(ClickEvent event) {
+        delegate.showConfirmDialog();
+    }
+
+    @UiHandler("showMessageDialog")
+    public void showMessageDialog(ClickEvent event) {
+    }
+
+    @UiHandler("showInputDialog")
+    public void showInputDialog(ClickEvent event) {
+        delegate.showInputDialog();
+    }
 }
