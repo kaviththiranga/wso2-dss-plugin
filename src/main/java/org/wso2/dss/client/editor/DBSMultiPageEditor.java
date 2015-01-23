@@ -32,6 +32,7 @@ import com.google.inject.Inject;
 
 import org.vectomatic.dom.svg.ui.SVGResource;
 import org.wso2.dss.client.editor.graphical.DBSEditor;
+import org.wso2.dss.client.editor.text.DBSTextEditorConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +60,7 @@ public class DBSMultiPageEditor extends AbstractEditorPresenter
         view.addGraphicalEditor(graphicalEditor);
 
         textEditor = editorProvider.getEditor();
-        textEditor.initialize(new DefaultTextEditorConfiguration(), notificationManager);
+        textEditor.initialize(new DBSTextEditorConfiguration(), notificationManager);
         textEditor.addPropertyListener(this);
         view.addTextEditor(textEditor);
     }
