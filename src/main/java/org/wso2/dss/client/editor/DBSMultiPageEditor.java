@@ -41,151 +41,156 @@ import javax.annotation.Nullable;
  * @author Evgen Vidolob
  */
 public class DBSMultiPageEditor extends AbstractEditorPresenter
-        implements DBSMultiPageEditorView.ActionDelegate, PropertyListener, IframeEditor {
+		implements DBSMultiPageEditorView.ActionDelegate, PropertyListener, IframeEditor {
 
-    private final DBSMultiPageEditorView view;
-    private final DBSEditor              graphicalEditor;
-    private final ConfigurableTextEditor textEditor;
+	private final DBSMultiPageEditorView view;
+	private final DBSEditor graphicalEditor;
+	private final ConfigurableTextEditor textEditor;
 
-    @Inject
-    public DBSMultiPageEditor(DBSMultiPageEditorView view,
-                              DBSEditor graphicalEditor,
-                              DefaultEditorProvider editorProvider,
-                              NotificationManager notificationManager) {
-        this.view = view;
-        view.setDelegate(this);
+	@Inject
+	public DBSMultiPageEditor(DBSMultiPageEditorView view,
+	                          DBSEditor graphicalEditor,
+	                          DefaultEditorProvider editorProvider,
+	                          NotificationManager notificationManager) {
+		this.view = view;
+		view.setDelegate(this);
 
-        this.graphicalEditor = graphicalEditor;
-        graphicalEditor.addPropertyListener(this);
-        view.addGraphicalEditor(graphicalEditor);
+		this.graphicalEditor = graphicalEditor;
+		graphicalEditor.addPropertyListener(this);
+		view.addGraphicalEditor(graphicalEditor);
 
-        textEditor = editorProvider.getEditor();
-        textEditor.initialize(new DBSTextEditorConfiguration(), notificationManager);
-        textEditor.addPropertyListener(this);
-        view.addTextEditor(textEditor);
-    }
+		textEditor = editorProvider.getEditor();
+		textEditor.initialize(new DBSTextEditorConfiguration(), notificationManager);
+		textEditor.addPropertyListener(this);
+		view.addTextEditor(textEditor);
+	}
 
-    @Override
-    public void init(@Nonnull EditorInput input) throws EditorInitException {
-        super.init(input);
-        textEditor.init(input);
-        graphicalEditor.init(input);
-    }
+	@Override
+	public void init(@Nonnull EditorInput input) throws EditorInitException {
+		super.init(input);
+		textEditor.init(input);
+		graphicalEditor.init(input);
+	}
 
-    @Override
-    protected void initializeEditor() {
+	@Override
+	protected void initializeEditor() {
 
-    }
+	}
 
-    @Override
-    public void onTextEditorChosen() {
-        view.showTextEditor();
+	@Override
+	public boolean isDirty() {
+		return textEditor.isDirty() || graphicalEditor.isDirty();
+	}
 
-        graphicalEditor.deserialize(new AsyncCallback<String>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                Log.error(DBSMultiPageEditor.class, caught);
-            }
+	@Override
+	public void onTextEditorChosen() {
+		view.showTextEditor();
 
-            @Override
-            public void onSuccess(String result) {
-                EmbeddedDocument document = textEditor.getDocument();
-                document.replace(0, document.getContents().length(), result);
-            }
-        });
-    }
+		if (isDirty()) {
+			graphicalEditor.deserialize(new AsyncCallback<String>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					Log.error(DBSMultiPageEditor.class, caught);
+				}
 
-    @Override
-    public boolean isDirty() {
-        return textEditor.isDirty() || graphicalEditor.isDirty();
-    }
+				@Override
+				public void onSuccess(String result) {
+					EmbeddedDocument document = textEditor.getDocument();
+					document.replace(0, document.getContents().length(), result);
+				}
+			});
+		}
+	}
 
-    @Override
-    public void onGraphicalEditorChosen() {
-        view.showGraphicalEditor();
-        graphicalEditor.serialize(textEditor.getDocument().getContents());
-    }
+	@Override
+	public void onGraphicalEditorChosen() {
+		view.showGraphicalEditor();
 
-    @Override
-    public void doSave() {
-        textEditor.doSave();
-    }
+		if (isDirty()) {
+			graphicalEditor.serialize(textEditor.getDocument().getContents());
+		}
+	}
 
-    @Override
-    public void doSave(AsyncCallback<EditorInput> callback) {
-        textEditor.doSave(callback);
-    }
+	@Override
+	public void doSave() {
+		textEditor.doSave();
+	}
 
-    @Override
-    public void doSaveAs() {
+	@Override
+	public void doSave(AsyncCallback<EditorInput> callback) {
+		textEditor.doSave(callback);
+	}
 
-    }
+	@Override
+	public void doSaveAs() {
 
-    @Override
-    public void activate() {
+	}
 
-    }
+	@Override
+	public void activate() {
 
-    @Override
-    public void close(boolean save) {
+	}
 
-    }
+	@Override
+	public void close(boolean save) {
 
-    @Override
-    public void onClose(@Nonnull AsyncCallback<Void> callback) {
-        handleClose();
-        textEditor.onClose(callback);
-    }
+	}
 
-    @Nonnull
-    @Override
-    public String getTitle() {
-        if (isDirty()) {
-            return "*" + input.getName();
-        } else {
-            return input.getName();
-        }
+	@Override
+	public void onClose(@Nonnull AsyncCallback<Void> callback) {
+		handleClose();
+		textEditor.onClose(callback);
+	}
 
-    }
+	@Nonnull
+	@Override
+	public String getTitle() {
+		if (isDirty()) {
+			return "*" + input.getName();
+		} else {
+			return input.getName();
+		}
 
-    @Nullable
-    @Override
-    public ImageResource getTitleImage() {
-        return input.getImageResource();
-    }
+	}
 
-    @Nullable
-    @Override
-    public String getTitleToolTip() {
-        return null;
-    }
+	@Nullable
+	@Override
+	public ImageResource getTitleImage() {
+		return input.getImageResource();
+	}
 
-    @Override
-    public void go(AcceptsOneWidget container) {
-        container.setWidget(view);
-    }
+	@Nullable
+	@Override
+	public String getTitleToolTip() {
+		return null;
+	}
 
-    @Nullable
-    @Override
-    public SVGResource getTitleSVGImage() {
-        return input.getSVGResource();
-    }
+	@Override
+	public void go(AcceptsOneWidget container) {
+		container.setWidget(view);
+	}
 
-    @Override
-    public void propertyChanged(PartPresenter source, int propId) {
-        if(propId == PROP_INPUT && source == textEditor){
-            onGraphicalEditorChosen();
-        }
-        firePropertyChange(propId);
-    }
+	@Nullable
+	@Override
+	public SVGResource getTitleSVGImage() {
+		return input.getSVGResource();
+	}
 
-    @Override
-    public void saveContent(String content) {
-        graphicalEditor.saveContent(content);
-    }
+	@Override
+	public void propertyChanged(PartPresenter source, int propId) {
+		if (propId == PROP_INPUT && source == textEditor) {
+			onGraphicalEditorChosen();
+		}
+		firePropertyChange(propId);
+	}
 
-    @Override
-    public void setDirtyState(boolean dirty) {
-        graphicalEditor.setDirtyState(dirty);
-    }
+	@Override
+	public void saveContent(String content) {
+		graphicalEditor.saveContent(content);
+	}
+
+	@Override
+	public void setDirtyState(boolean dirty) {
+		graphicalEditor.setDirtyState(dirty);
+	}
 }
